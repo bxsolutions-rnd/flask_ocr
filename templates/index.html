@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Capture Bill via Webcam</title>
+</head>
+<body>
+  <h1>Webcam Bill OCR</h1>
+ 
+  <video id="video" width="320" height="240" autoplay></video>
+  <br>
+  <button id="snap">Capture</button>
+  <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+  <!-- <form id="uploadForm" method="POST" action="/upload_webcam" enctype="multipart/form-data">
+    <input type="hidden" name="image_data" id="image_data">
+    <button type="submit">Submit for OCR</button>
+  </form>
+  -->
+
+  <form id="uploadForm" method="POST" action="/upload_webcam" enctype="multipart/form-data">
+    <input type="hidden" name="image_data" id="image_data">
+    <button type="submit" id="captureAndSubmit">Capture & Submit</button>
+  </form>
+
+  {% if result %}
+    <h3>Extracted Text:</h3>
+    <p>{{ result }}</p>
+    <p><strong>Total:</strong> {{ total }}</p>
+    <p><strong>Cash Paid:</strong> {{ cash }}</p>
+  {% endif %}
+ 
+  <!-- <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const imageDataInput = document.getElementById('image_data');
+ 
+    // Get access to webcam
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => { video.srcObject = stream; });
+ 
+    document.getElementById('snap').addEventListener('click', () => {
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataURL = canvas.toDataURL('image/jpeg');
+      imageDataInput.value = dataURL;
+    });
+  </script> -->
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const imageDataInput = document.getElementById('image_data');
+    const form = document.getElementById('uploadForm');
+     
+    // Access webcam
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      });
+     
+    document.getElementById('captureAndSubmit').addEventListener('click', (e) => {
+      e.preventDefault(); // prevent default form submission
+     
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+     
+      const dataURL = canvas.toDataURL('image/jpeg');
+      imageDataInput.value = dataURL;
+     
+      form.submit(); // submit the form manually after capturing
+    });
+    </script>
+</body>
+</html>
+ 
