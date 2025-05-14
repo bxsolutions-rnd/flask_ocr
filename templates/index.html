@@ -50,25 +50,26 @@
     const canvas = document.getElementById('canvas');
     const imageDataInput = document.getElementById('image_data');
     const form = document.getElementById('uploadForm');
-     
-    // Access webcam
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => {
-        video.srcObject = stream;
-      });
-     
+   
+    navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "environment" }  // This requests the back camera
+    })
+    .then(stream => {
+      video.srcObject = stream;
+    })
+    .catch(error => {
+      console.error("Camera access error:", error);
+    });
+   
     document.getElementById('captureAndSubmit').addEventListener('click', (e) => {
-      e.preventDefault(); // prevent default form submission
-     
+      e.preventDefault();
       const context = canvas.getContext('2d');
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
-     
       const dataURL = canvas.toDataURL('image/jpeg');
       imageDataInput.value = dataURL;
-     
-      form.submit(); // submit the form manually after capturing
+      form.submit();
     });
-    </script>
+  </script>
 </body>
 </html>
  
