@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template
 import easyocr, cv2, numpy as np
 import base64, re
- 
+import os
 app = Flask(__name__)
  
 @app.route('/')
@@ -34,5 +34,6 @@ def upload_webcam():
     return render_template('index.html', result=result_string, total=total_amount, cash=cash_paid)
  
 if __name__ == '__main__':
-    app.run(debug=True)
+    port=int(os.environ.get("PORT",5000))
+    app.run(host='0.0.0.0',port=port)
  
